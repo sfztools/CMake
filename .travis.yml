@@ -1,5 +1,5 @@
 language: cpp
-env: TRAVIS_TAG="${TRAVIS_OS_NAME}"
+env: TRAVIS_TAG=${TRAVIS_OS_NAME}
 git:
   depth: false
 
@@ -16,7 +16,7 @@ jobs:
   - os:   linux
     arch: arm64
     dist: bionic
-      addons:
+    addons:
       apt:
         sources:
         - sourceline: 'ppa:ubuntu-toolchain-r/test'
