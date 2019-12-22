@@ -1,15 +1,25 @@
-os:       linux
-dist:     bionic
 language: cpp
-arch:     arm64
-env:      TRAVIS_TAG="${TRAVIS_OS_NAME}"
-addons:
-  apt:
-    sources:
-    - sourceline: 'ppa:ubuntu-toolchain-r/test'
-
+env: TRAVIS_TAG="${TRAVIS_OS_NAME}"
 git:
   depth: false
+
+jobs:
+  include:
+  - os:   linux
+    arch: amd64
+    dist: bionic
+    addons:
+      apt:
+        sources:
+        - sourceline: 'ppa:ubuntu-toolchain-r/test'
+
+  - os:   linux
+    arch: arm64
+    dist: bionic
+      addons:
+      apt:
+        sources:
+        - sourceline: 'ppa:ubuntu-toolchain-r/test'
 
 install:
 - if [[ -z ${TAG_VERSION} ]]; then TAG_VERSION="3.13.0"; fi
