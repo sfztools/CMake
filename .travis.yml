@@ -1,0 +1,36 @@
+os:       linux
+dist:     bionic
+language: cpp
+arch:     arm64
+env:      TRAVIS_TAG="${TRAVIS_OS_NAME}"
+addons:
+  apt:
+    sources:
+    - sourceline: 'ppa:ubuntu-toolchain-r/test'
+
+git:
+  depth: false
+
+install:
+- if [[ -z ${TAG_VERSION} ]]; then TAG_VERSION="3.13.0"; fi
+- git checkout tags/v${TAG_VERSION}
+- "travis_wait 15 sleep 900 &"
+
+script:
+- export INSTALL_DIR="cmake-${TAG_VERSION}-${TRAVIS_OS_NAME}-${TRAVIS_CPU_ARCH}"
+- export DEPLOY_FILE="${INSTALL_DIR}.tar.gz"
+- mkdir -p build/${INSTALL_DIR} && cd build && ../bootstrap --prefix=${PWD}/${INSTALL_DIR}
+- make -j$(nproc)
+
+after_success:
+- make install
+- tar -zcvf ${DEPLOY_FILE} ${INSTALL_DIR}
+
+deploy:
+  provider:     releases
+  skip_cleanup: true
+  token:        ${GITHUB_TOKEN}
+  file:         ${DEPLOY_FILE}
+  on:
+    repo:   ${TRAVIS_REPO_SLUG}
+    branch: master

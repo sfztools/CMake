@@ -11,3 +11,5 @@ Testing
 
 # Visual Studio Code
 .vscode/
+*.code-workspace
+build*
